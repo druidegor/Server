@@ -31,7 +31,6 @@ public class CommentDao {
 
     public List<Comment> getCommentsByTaskId(int taskId) {
         List<Comment> comments = new ArrayList<>();
-        // Используем JOIN для получения имени автора комментария
         String sql = "SELECT c.id, c.task_id, c.text, u.name AS author_name " +
                 "FROM comments c JOIN users u ON c.author_id = u.id " +
                 "WHERE c.task_id = ? ORDER BY c.created_at ASC";
