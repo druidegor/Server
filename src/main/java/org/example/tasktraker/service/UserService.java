@@ -28,29 +28,26 @@ public class UserService {
     }
 
     public void register(String name, String email, String password, String confirmPassword, String role) {
-        // 1. Проверка, что поля не пустые
+    
         if (name == null || name.isEmpty() || email == null || email.isEmpty() || password == null || password.isEmpty() || role == null) {
             throw new ValidationException("Fill all fields");
         }
 
-        // 2. Проверка формата email с помощью регулярного выражения
-        // (должны быть символы, потом @, потом опять символы, точка и домен)
+
         String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
         if (!email.matches(emailRegex)) {
             throw new ValidationException("Invalid email format");
         }
 
-        // 3. Проверка длины пароля (например, минимум 6 символов)
         if (password.length() < 6) {
             throw new ValidationException("Password must be at least 6 characters long");
         }
 
-        // 4. Проверка совпадения паролей
         if (!password.equals(confirmPassword)) {
             throw new ValidationException("Passwords do not match");
         }
 
-        // 5. Проверка, существует ли уже такой email в БД
+
         if (userDao.existsByEmail(email)) {
             throw new ValidationException("User already exists");
         }
