@@ -102,7 +102,7 @@ public class TaskService {
         long inProgress = projectTasks.stream().filter(t -> "In Progress".equals(t.getStatus())).count();
         long accepted = projectTasks.stream().filter(t -> "Accepted".equals(t.getStatus())).count();
 
-        // Вычисляем процент выполнения
+
         double completionRate = (double) accepted / total * 100.0;
 
         return String.format("ОТЧЕТ ПО ПРОЕКТУ ID %d\n" +
@@ -116,15 +116,12 @@ public class TaskService {
                 projectId, total, open, inProgress, accepted, completionRate);
     }
 
-    /**
-     * Алгоритм 2: Умное распределение задачи (на наименее загруженного разработчика)
-     */
     public void autoAssignTask(int taskId, int projectId) {
         if (taskId <= 0 || projectId <= 0) {
             throw new ValidationException("Invalid task or project ID");
         }
 
-        // 1. Получаем всех разработчиков проекта
+ 
         List<org.example.tasktraker.entity.User> developers = projectUserDao.getUsersByProject(projectId).stream()
                 .filter(u -> "DEVELOPER".equals(u.getRole()))
                 .toList();
@@ -133,7 +130,7 @@ public class TaskService {
             throw new TrackerException("Cannot auto-assign: No developers in this project.");
         }
 
-        // 2. Ищем самого свободного разработчика
+
         List<Task> allTasks = taskDao.getAllTasks();
         org.example.tasktraker.entity.User leastLoadedDev = null;
         long minTasks = Long.MAX_VALUE;
@@ -154,7 +151,6 @@ public class TaskService {
             throw new TrackerException("Could not find a developer to assign.");
         }
 
-        // 3. Назначаем задачу на самого свободного
         boolean updated = taskDao.updateTaskAssignee(taskId, leastLoadedDev.getId());
         if (!updated) {
             throw new TrackerException("Database error during auto-assignment");
