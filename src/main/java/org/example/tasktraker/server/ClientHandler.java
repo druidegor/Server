@@ -21,8 +21,8 @@ import java.util.List;
 public class ClientHandler implements Runnable {
     private final Socket socket;
     private final UserService userService;
-    private final ProjectService projectService; // Добавили сервис проектов
-    private final TaskService taskService; // <-- ДОБАВИТЬ ЭТО
+    private final ProjectService projectService; 
+    private final TaskService taskService; 
     private final CommentService commentService;
 
     public ClientHandler(Socket socket) {
@@ -30,7 +30,7 @@ public class ClientHandler implements Runnable {
         this.userService = new UserService();
         this.projectService = new ProjectService();
         this.taskService = new TaskService();
-        this.commentService = new CommentService(); // <-- Инициализируем
+        this.commentService = new CommentService(); 
     }
 
     @Override
@@ -125,7 +125,6 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    // --- НОВЫЕ МЕТОДЫ ---
 
     private Response handleGetAllProjects() {
         try {
@@ -261,7 +260,6 @@ public class ClientHandler implements Runnable {
 
     private Response handleCreateBug(Object payload) {
         try {
-            // [title, description, projectId, authorId, optional assigneeId]
             Object[] data = (Object[]) payload;
             String title = (String) data[0];
             String description = (String) data[1];
@@ -283,7 +281,6 @@ public class ClientHandler implements Runnable {
 
     private Response handleChangeTaskStatus(Object payload) {
         try {
-            // Ожидаем массив int: [taskId, statusId]
             int[] data = (int[]) payload;
             int taskId = data[0];
             int statusId = data[1];
